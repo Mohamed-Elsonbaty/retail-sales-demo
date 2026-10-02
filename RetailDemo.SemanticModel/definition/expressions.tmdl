@@ -1,0 +1,6 @@
+/// Folder that holds branches.csv, products.csv, sales.csv and targets.csv (ends with a backslash).
+expression DataFolder = "D:\Portfolio\retail-demo\data\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 11788769-c9e4-531b-8268-3c884970a0f2
+
+	annotation PBI_ResultType = Text
+

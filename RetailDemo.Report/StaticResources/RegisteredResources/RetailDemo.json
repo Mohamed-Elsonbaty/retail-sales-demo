@@ -1,0 +1,42 @@
+{
+  "name": "RetailDemo",
+  "dataColors": [
+    "#1D4ED8",
+    "#9CA3AF",
+    "#15803D",
+    "#B91C1C",
+    "#B45309",
+    "#60A5FA",
+    "#0F766E",
+    "#7C3AED"
+  ],
+  "foreground": "#111827",
+  "foregroundNeutralSecondary": "#6B7280",
+  "background": "#FFFFFF",
+  "tableAccent": "#1D4ED8",
+  "good": "#15803D",
+  "bad": "#B91C1C",
+  "neutral": "#B45309",
+  "textClasses": {
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 9,
+      "color": "#6B7280"
+    },
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 12,
+      "color": "#111827"
+    },
+    "header": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 11,
+      "color": "#111827"
+    },
+    "callout": {
+      "fontFace": "Segoe UI Bold",
+      "fontSize": 20,
+      "color": "#111827"
+    }
+  }
+}

@@ -1,0 +1,59 @@
+table Branch
+	lineageTag: 48d1eb04-2c72-54b6-b7c4-5bc22392a5d4
+
+	column branch_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 2f2c5d10-48f7-55a7-bcd0-09c2ecf58513
+		summarizeBy: none
+		sourceColumn: branch_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column branch_name
+		dataType: string
+		lineageTag: 1014b8db-60ee-5e47-858b-267ea0ba0a55
+		summarizeBy: none
+		sourceColumn: branch_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column area
+		dataType: string
+		lineageTag: 53a0f47a-4732-5ba2-8b18-ea44b3128824
+		summarizeBy: none
+		sourceColumn: area
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel
+		dataType: string
+		lineageTag: 89e6629f-cb02-5c44-9b54-807233beae68
+		summarizeBy: none
+		sourceColumn: channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column open_date
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: 19ddc47b-6bd8-564d-83e3-c736b4bb8d8c
+		summarizeBy: none
+		sourceColumn: open_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Branch = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "branches.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"branch_id", Int64.Type}, {"branch_name", type text}, {"area", type text}, {"channel", type text}, {"open_date", type date}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

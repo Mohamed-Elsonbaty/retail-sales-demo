@@ -1,0 +1,28 @@
+branch_id,branch_name,area,channel,open_date
+101,101-Al Rawdah,Jeddah,POS,2024-06-01
+102,102-Al Salamah,Jeddah,POS,2021-01-01
+103,103-Obhur,Jeddah,POS,2021-01-01
+104,104-Al Hamra,Jeddah,POS,2025-08-01
+105,105-Al Safa,Jeddah,POS,2021-01-01
+106,106-Al Naeem,Jeddah,POS,2021-01-01
+107,107-Al Marwah,Jeddah,POS,2021-01-01
+108,108-Al Olaya,Riyadh,POS,2021-01-01
+109,109-Al Malqa,Riyadh,POS,2021-01-01
+110,110-Al Nakheel,Riyadh,POS,2021-01-01
+111,111-Al Yasmin,Riyadh,POS,2021-01-01
+112,112-Al Sahafa,Riyadh,POS,2025-04-01
+113,113-Al Rabwah,Riyadh,POS,2021-01-01
+114,114-Al Aziziyah,Makkah,POS,2021-01-01
+115,115-Al Awali,Makkah,POS,2021-01-01
+116,116-Al Shawqiyah,Makkah,POS,2021-01-01
+117,117-Al Zahir,Makkah,POS,2021-01-01
+118,118-Quba,Madinah,POS,2021-01-01
+119,119-Al Aziziyah M,Madinah,POS,2021-01-01
+120,120-Al Uyun,Madinah,POS,2021-01-01
+121,121-Dammam Corniche,Eastern,POS,2021-01-01
+122,122-Al Khobar North,Eastern,POS,2021-01-01
+123,123-Dhahran,Eastern,POS,2021-01-01
+124,124-Al Jubail,Eastern,POS,2021-01-01
+125,125-Al Hawiyah,Taif,POS,2021-01-01
+126,126-Shihar,Taif,POS,2021-01-01
+900,900-Online Store,Online,Online,2021-01-01

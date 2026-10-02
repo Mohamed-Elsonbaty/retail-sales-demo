@@ -1,0 +1,89 @@
+table Sales
+	lineageTag: 1ed20448-2f1f-5c24-a2bd-aefcbd8df310
+
+	column date
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: b2bfeacd-f808-5a3a-afed-4a40aa011318
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column branch_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c1a89042-7e8a-59dc-ac45-e297bf1f4578
+		summarizeBy: none
+		sourceColumn: branch_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9abafa88-e5b6-5377-a0d7-871936df2475
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column qty
+		dataType: int64
+		formatString: #,0
+		lineageTag: 924564a2-b63a-5b43-a259-f5c45cb25e3a
+		summarizeBy: none
+		sourceColumn: qty
+
+		annotation SummarizationSetBy = Automatic
+
+	column net_sales
+		dataType: double
+		formatString: #,0.00
+		lineageTag: b375f98c-4300-57f4-8ba9-0cca214199ec
+		summarizeBy: none
+		sourceColumn: net_sales
+
+		annotation SummarizationSetBy = Automatic
+
+	column cost
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 4c77726c-260c-523b-a573-f2a6a034568d
+		summarizeBy: none
+		sourceColumn: cost
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_refund
+		dataType: boolean
+		lineageTag: d1ff2f23-cf86-5f88-ad7b-fbcedd3ffb96
+		summarizeBy: none
+		sourceColumn: is_refund
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel
+		dataType: string
+		lineageTag: 0c1fbd42-ed8b-5ee2-a3e8-e8e8c9715c7e
+		summarizeBy: none
+		sourceColumn: channel
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Sales = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "sales.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"date", type date}, {"branch_id", Int64.Type}, {"product_id", Int64.Type}, {"qty", Int64.Type}, {"net_sales", type number}, {"cost", type number}, {"is_refund", type logical}, {"channel", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
+

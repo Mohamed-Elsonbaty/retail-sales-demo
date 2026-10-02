@@ -1,0 +1,20 @@
+relationship 45f1c8ac-a699-5961-b1d3-59fdd76d5e67
+	fromColumn: Sales.date
+	toColumn: Date.Date
+
+relationship 98678b90-65db-5fa7-a934-bd87dab15e17
+	fromColumn: Sales.branch_id
+	toColumn: Branch.branch_id
+
+relationship e9006044-d672-57a3-9c33-ded832458339
+	fromColumn: Sales.product_id
+	toColumn: Product.product_id
+
+relationship 3f4ddc0d-9c13-5ae5-9fc8-996631165832
+	fromColumn: Target.month
+	toColumn: Date.Date
+
+relationship 31baf2ab-a8e0-58b6-be75-d2fcd5559083
+	fromColumn: Target.branch_id
+	toColumn: Branch.branch_id
+

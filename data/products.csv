@@ -1,0 +1,61 @@
+product_id,product_name,category,unit_price,unit_cost
+10001,Amber Night,Perfumes,141.0,58.52
+10002,Amber Night Large,Perfumes,475.0,220.88
+10003,White Musk,Perfumes,615.0,332.11
+10004,Royal Oud,Perfumes,291.0,132.0
+10005,Desert Rose,Perfumes,600.0,239.38
+10006,Saffron Mist,Perfumes,595.0,324.86
+10007,Saffron Mist Large,Perfumes,440.0,191.75
+10008,Velvet Leather,Perfumes,146.0,65.3
+10009,Velvet Leather Large,Perfumes,686.0,311.52
+10010,Citrus Bloom,Perfumes,230.0,89.66
+10011,Midnight Iris,Perfumes,457.0,208.93
+10012,Cambodi Oud,Oud & Incense,593.0,209.59
+10013,Cambodi Oud Large,Oud & Incense,972.0,415.52
+10014,Muattar,Oud & Incense,600.0,207.44
+10015,Muattar Large,Oud & Incense,554.0,211.6
+10016,Bakhoor Classic,Oud & Incense,174.0,78.23
+10017,Oud Chips,Oud & Incense,554.0,253.9
+10018,Oud Chips Large,Oud & Incense,1035.0,353.34
+10019,Mabthoth,Oud & Incense,339.0,162.31
+10020,Mabthoth Large,Oud & Incense,1263.0,523.97
+10021,Oud Oil,Oud & Incense,682.0,249.54
+10022,Incense Sticks,Oud & Incense,639.0,236.99
+10023,Incense Sticks Large,Oud & Incense,586.0,220.35
+10024,Rose Cream,Skincare,53.0,28.99
+10025,Rose Cream Large,Skincare,117.0,68.21
+10026,Argan Oil,Skincare,82.0,37.95
+10027,Argan Oil Large,Skincare,220.0,124.12
+10028,Musk Lotion,Skincare,173.0,92.82
+10029,Musk Lotion Large,Skincare,268.0,138.52
+10030,Body Mist,Skincare,172.0,93.78
+10031,Body Mist Large,Skincare,326.0,194.11
+10032,Hand Cream,Skincare,71.0,39.03
+10033,Hand Cream Large,Skincare,324.0,148.9
+10034,Hair Oil,Skincare,64.0,30.61
+10035,Sidr Honey,Honey,245.0,140.24
+10036,Samar Honey,Honey,222.0,130.78
+10037,Samar Honey Large,Honey,369.0,240.5
+10038,Acacia Honey,Honey,177.0,108.58
+10039,Acacia Honey Large,Honey,299.0,168.7
+10040,Mountain Honey,Honey,149.0,86.99
+10041,Mountain Honey Large,Honey,176.0,103.55
+10042,Royal Jelly,Honey,76.0,50.78
+10043,Ajwa Dates,Nuts & Dates,43.0,29.75
+10044,Sukkari Dates,Nuts & Dates,21.0,15.43
+10045,Sukkari Dates Large,Nuts & Dates,208.0,142.67
+10046,Mixed Nuts,Nuts & Dates,78.0,52.89
+10047,Mixed Nuts Large,Nuts & Dates,111.0,81.06
+10048,Pistachio,Nuts & Dates,85.0,54.24
+10049,Cashew,Nuts & Dates,124.0,85.42
+10050,Cashew Large,Nuts & Dates,101.0,74.01
+10051,Almond,Nuts & Dates,71.0,46.56
+10052,Almond Large,Nuts & Dates,223.0,156.64
+10053,Eid Box,Gift Sets,328.0,186.23
+10054,Eid Box Large,Gift Sets,350.0,147.45
+10055,Signature Set,Gift Sets,505.0,242.64
+10056,Signature Set Large,Gift Sets,430.0,185.15
+10057,Discovery Kit,Gift Sets,534.0,266.5
+10058,Discovery Kit Large,Gift Sets,720.0,343.38
+10059,Luxury Box,Gift Sets,127.0,55.87
+10060,Luxury Box Large,Gift Sets,223.0,95.88

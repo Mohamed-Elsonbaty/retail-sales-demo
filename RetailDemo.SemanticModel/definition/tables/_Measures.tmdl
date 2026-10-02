@@ -1,0 +1,274 @@
+table _Measures
+	lineageTag: 9069ebaf-8c6b-5be0-9ca7-75262a5b4061
+
+	/// Sales after discounts and returns.
+	measure 'Net Sales' = SUM(Sales[net_sales])
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: b5df93c6-b7cf-5d10-b2dc-8f00b5c71e60
+
+	measure Cost = SUM(Sales[cost])
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: 0bd00eac-e400-5d7e-b4ee-a09eb43dbc26
+
+	measure 'Gross Profit' = [Net Sales] - [Cost]
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: 66d0caf5-9834-5b51-bd13-ad52e636e554
+
+	measure 'Gross Margin %' = DIVIDE([Gross Profit], [Net Sales])
+		formatString: 0.0%
+		displayFolder: Sales
+		lineageTag: 36d17d5e-7b5b-5aa9-884f-dce68c4d4f68
+
+	measure 'Units Sold' = CALCULATE(SUM(Sales[qty]), Sales[is_refund] = FALSE)
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: da60bb47-30ab-5829-a451-0f43f7cb35aa
+
+	/// Sales before returns.
+	measure 'Gross Sales' = CALCULATE([Net Sales], Sales[is_refund] = FALSE)
+		formatString: #,0
+		displayFolder: Returns
+		lineageTag: a92e9f69-dc41-54e3-b759-826e0baf7470
+
+	/// Value of returned goods, as a positive number.
+	measure 'Returns Value' = -CALCULATE([Net Sales], Sales[is_refund] = TRUE)
+		formatString: #,0
+		displayFolder: Returns
+		lineageTag: 4c57c38a-c417-5100-a90a-06193a7f06db
+
+	measure 'Return Rate %' = DIVIDE([Returns Value], [Gross Sales])
+		formatString: 0.00%
+		displayFolder: Returns
+		lineageTag: 483be975-d308-5bd2-b01c-921d726b5586
+
+	/// Net sales for the same dates one year earlier.
+	measure 'Net Sales LY' = CALCULATE([Net Sales], SAMEPERIODLASTYEAR('Date'[Date]))
+		formatString: #,0
+		displayFolder: Last Year
+		lineageTag: bf1c3c21-3bb2-58cb-a7ec-ef26eb0a0679
+
+	measure 'vs LY %' = DIVIDE([Net Sales] - [Net Sales LY], [Net Sales LY])
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Last Year
+		lineageTag: ec21d3a4-5c74-5224-94e3-ffb91f88fb71
+
+	/// Net sales of branches that were already open at the start of the same period last year.
+	measure 'LFL Net Sales' =
+			VAR PeriodStartLY = EDATE(MIN('Date'[Date]), -12)
+			RETURN
+			    CALCULATE(
+			        [Net Sales],
+			        KEEPFILTERS(FILTER(ALL(Branch[branch_id], Branch[open_date]), Branch[open_date] <= PeriodStartLY))
+			    )
+		formatString: #,0
+		displayFolder: Last Year
+		lineageTag: fc4d3cc9-cc30-5be2-989e-17a3b1a3903c
+
+	measure 'LFL Net Sales LY' =
+			VAR PeriodStartLY = EDATE(MIN('Date'[Date]), -12)
+			RETURN
+			    CALCULATE(
+			        [Net Sales LY],
+			        KEEPFILTERS(FILTER(ALL(Branch[branch_id], Branch[open_date]), Branch[open_date] <= PeriodStartLY))
+			    )
+		formatString: #,0
+		displayFolder: Last Year
+		lineageTag: 8b5d7cf7-b299-5659-8200-701fa96eae8b
+
+	/// Like-for-like growth: same branches, same period, this year vs last year.
+	measure 'LFL %' = DIVIDE([LFL Net Sales] - [LFL Net Sales LY], [LFL Net Sales LY])
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Last Year
+		lineageTag: 954ba58b-1051-5270-96f9-9422386f89bf
+
+	/// Monthly branch target. Targets are set per branch, not per product or category.
+	measure Target = SUM(Target[target])
+		formatString: #,0
+		displayFolder: Target
+		lineageTag: 0f635478-7a97-5863-a668-330c3e9aee61
+
+	measure 'Target Achievement %' = DIVIDE([Net Sales], [Target])
+		formatString: 0.0%
+		displayFolder: Target
+		lineageTag: 219d5542-cae7-5c30-84cc-3cfee013eb9e
+
+	measure 'Achievement Status' =
+			VAR A = [Target Achievement %]
+			RETURN
+			    SWITCH(TRUE(), ISBLANK(A), BLANK(), A < 0.8, "Below 80%", A < 0.9, "80-90%", "90%+")
+		displayFolder: Target
+		lineageTag: 5c7bc026-9677-51ca-9523-3d3d65d48018
+
+	/// Font colour for achievement: red below 80%, amber 80-90%, green 90% and above.
+	measure 'Achievement Color' =
+			VAR A = [Target Achievement %]
+			RETURN
+			    SWITCH(TRUE(), ISBLANK(A), BLANK(), A < 0.8, "#C53030", A < 0.9, "#B7791F", "#1F8A5B")
+		displayFolder: Target
+		lineageTag: 31160999-b5c6-549e-be9c-472756cc9286
+
+	/// How many branches are below 80% of target in the selected period.
+	measure 'Branches Below 80%' =
+			COUNTROWS(
+			    FILTER(VALUES(Branch[branch_id]), NOT ISBLANK([Target]) && [Target Achievement %] < 0.8)
+			)
+		formatString: 0
+		displayFolder: Target
+		lineageTag: a078d839-ac52-5a38-b13a-9af6432286e2
+
+	/// Branches with sales in the selected period.
+	measure 'Branch Count' = COUNTROWS(FILTER(VALUES(Branch[branch_id]), NOT ISBLANK([Net Sales])))
+		formatString: 0
+		displayFolder: Target
+		lineageTag: ff1ea8a2-1b53-50b8-ba47-0116a5673d7c
+
+	/// Green when above last year, red when below.
+	measure 'vs LY Color' =
+			SWITCH(TRUE(), ISBLANK([Net Sales]), BLANK(), DIVIDE([Net Sales LY], [Net Sales]) < 0.5, "#6B7280",
+			    [vs LY %] >= 0, "#15803D", "#B91C1C")
+		displayFolder: Formatting
+		lineageTag: 22c26780-9b3b-5f44-b44d-70d5c0b8e7b5
+
+	measure 'LFL Color' = IF(ISBLANK([LFL %]), BLANK(), IF([LFL %] >= 0, "#1F8A5B", "#C53030"))
+		displayFolder: Formatting
+		lineageTag: a2da1f3e-aac1-5a96-9dd0-b4f670967ad0
+
+	/// Light background behind the achievement value.
+	measure 'Achievement Tint' =
+			VAR A = [Target Achievement %]
+			RETURN
+			    SWITCH(TRUE(), ISBLANK(A), BLANK(), A < 0.8, "#FDECEC", A < 0.9, "#FDF4E3", "#E7F5EE")
+		displayFolder: Formatting
+		lineageTag: a60e298d-f107-552a-aa20-3bc74791f2b0
+
+	/// Dynamic title for the monthly trend chart.
+	measure 'Trend Title' =
+			VAR Y = MAX('Date'[Year])
+			RETURN "Net sales by month, " & Y & " vs " & (Y - 1)
+		displayFolder: Titles
+		lineageTag: 3fc2c935-9502-5f06-b530-2f788cbba27c
+
+	/// Arrow and growth vs last year, for cards and tables.
+	measure 'vs LY Label' =
+			VAR G = [vs LY %]
+			VAR IsNew = DIVIDE([Net Sales LY], [Net Sales]) < 0.5
+			RETURN
+			    SWITCH(TRUE(), ISBLANK([Net Sales]), BLANK(), IsNew, "new", IF(G >= 0, "▲ ", "▼ ") & FORMAT(ABS(G), "0.0%"))
+		displayFolder: Labels
+		lineageTag: e8d45681-4f22-56e9-a52e-02e87a572f5c
+
+	/// Percentage points above or below 100% of target.
+	measure 'Target Gap Label' =
+			VAR A = [Target Achievement %]
+			RETURN IF(ISBLANK(A), BLANK(), IF(A >= 1, "▲ ", "▼ ") & FORMAT(ABS(A - 1) * 100, "0.0") & " pts")
+		displayFolder: Labels
+		lineageTag: c17faecf-cd01-58d0-9340-da44a5667958
+
+	measure 'Target Gap Color' = IF(ISBLANK([Target Achievement %]), BLANK(), IF([Target Achievement %] >= 1, "#15803D", "#B91C1C"))
+		displayFolder: Formatting
+		lineageTag: 81d860ef-8dc6-52a1-95b6-7fc6baa52443
+
+	/// Branches that count in like-for-like.
+	measure 'LFL Branch Count' =
+			VAR PeriodStartLY = EDATE(MIN('Date'[Date]), -12)
+			RETURN
+			    COUNTROWS(
+			        FILTER(VALUES(Branch[branch_id]),
+			            CALCULATE(MAX(Branch[open_date])) <= PeriodStartLY && NOT ISBLANK([Net Sales]))
+			    )
+		formatString: 0
+		displayFolder: Last Year
+		lineageTag: de9537e8-956d-5fa0-bad6-51c62cfaa357
+
+	/// Growth vs last year, only for branches open all of last year (blank for new branches).
+	measure 'LFL vs LY %' =
+			VAR PeriodStartLY = EDATE(MIN('Date'[Date]), -12)
+			RETURN IF(CALCULATE(MAX(Branch[open_date])) <= PeriodStartLY, [vs LY %])
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Last Year
+		lineageTag: 0ea08e34-88f9-582f-a549-cb800c138c80
+
+	measure 'LFL Branches Label' = FORMAT([LFL Branch Count], "0") & " branches"
+		displayFolder: Labels
+		lineageTag: 61d85da2-44dc-5113-9bf4-5d883d9e0a18
+
+	measure 'Gross Profit Label' = "SAR " & FORMAT([Gross Profit] / 1000000, "0.0") & "M"
+		displayFolder: Labels
+		lineageTag: 99413a44-fe0f-5fbd-8f7e-4ab51506ab62
+
+	measure 'Returns Label' = "SAR " & FORMAT([Returns Value] / 1000, "#,0") & "K"
+		displayFolder: Labels
+		lineageTag: 3bffe011-f91b-5a35-bdcb-047cf44deb3a
+
+	measure 'Target Label' = "SAR " & FORMAT([Target] / 1000000, "0.0") & "M"
+		displayFolder: Labels
+		lineageTag: 19862ff3-8ea9-5393-ad4b-1b975d7c25c0
+
+	measure 'Below 80 Label' = FORMAT([Branches Below 80%], "0") & " of " & FORMAT([Branch Count], "0")
+		displayFolder: Labels
+		lineageTag: ccc5b602-e20c-50f2-ad91-5d96c2d8c646
+
+	measure 'Below 80 Share Label' = FORMAT(DIVIDE([Branches Below 80%], [Branch Count]), "0%") & " of branches"
+		displayFolder: Labels
+		lineageTag: 9e45835f-b1bf-5a00-b264-9e1d2d208b81
+
+	/// Branch with the highest target achievement.
+	measure 'Best Branch' =
+			VAR T = ADDCOLUMNS(FILTER(VALUES(Branch[branch_name]), NOT ISBLANK([Target])), "@a", [Target Achievement %])
+			RETURN MAXX(TOPN(1, T, [@a], DESC), Branch[branch_name])
+		displayFolder: Target
+		lineageTag: 527dd2c7-2579-50c4-a28d-cac51c184fff
+
+	measure 'Best Branch Achievement' =
+			VAR T = ADDCOLUMNS(FILTER(VALUES(Branch[branch_name]), NOT ISBLANK([Target])), "@a", [Target Achievement %])
+			RETURN FORMAT(MAXX(TOPN(1, T, [@a], DESC), [@a]), "0.0%")
+		displayFolder: Labels
+		lineageTag: fcb2733c-1778-5b1f-a295-f1d72b32426f
+
+	/// Branch with the lowest target achievement.
+	measure 'Lowest Branch' =
+			VAR T = ADDCOLUMNS(FILTER(VALUES(Branch[branch_name]), NOT ISBLANK([Target])), "@a", [Target Achievement %])
+			RETURN MAXX(TOPN(1, T, [@a], ASC), Branch[branch_name])
+		displayFolder: Target
+		lineageTag: d330d6af-af11-56de-b769-f76c5443c60b
+
+	measure 'Lowest Branch Achievement' =
+			VAR T = ADDCOLUMNS(FILTER(VALUES(Branch[branch_name]), NOT ISBLANK([Target])), "@a", [Target Achievement %])
+			RETURN FORMAT(MINX(TOPN(1, T, [@a], ASC), [@a]), "0.0%")
+		displayFolder: Labels
+		lineageTag: 8259bb26-ee8c-5672-b591-73cde510609b
+
+	/// Page headline that updates with the filters.
+	measure 'Headline Overview' =
+			"SAR " & FORMAT([Net Sales] / 1000000, "0.0") & "M net sales, " & FORMAT([vs LY %], "+0.0%;-0.0%")
+			    & " vs last year, " & FORMAT([Target Achievement %], "0.0%") & " of target"
+		displayFolder: Titles
+		lineageTag: 640daee9-a912-5710-a991-5196e97317a3
+
+	/// Page headline for the branch page.
+	measure 'Headline Branches' =
+			FORMAT([Branches Below 80%], "0") & " of " & FORMAT([Branch Count], "0")
+			    & " branches are below 80% of target"
+		displayFolder: Titles
+		lineageTag: 51b65ba4-5c32-5e2b-90e9-2a47563a7605
+
+	column Spacer
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c648134f-94c9-53b4-9144-9c2820f1602c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Spacer]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = calculated
+		mode: import
+		source = ROW("Spacer", 0)
+
+	annotation PBI_ResultType = Table
+
